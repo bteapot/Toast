@@ -79,7 +79,7 @@ Toast.Config.error.icon = UIImage(systemName: "exclamationmark.triangle.fill", w
 
 ## License
 
-SectionedTVC is available under the MIT license. See the LICENSE file for more info.
+Toast is available under the MIT license. See the LICENSE file for more info.
 
 
 
