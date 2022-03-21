@@ -32,6 +32,10 @@ final class W: UIWindow {
     }
     
     var vc: VC { self.rootViewController as! VC }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        return self.vc.v.hitTest(self.vc.v.convert(point, from: self), with: event)
+    }
 }
 
 // MARK: - View Controller
