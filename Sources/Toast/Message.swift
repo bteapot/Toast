@@ -119,7 +119,7 @@ final class Message: UIView {
         let textWidth:      CGFloat = size.width - leftInset - rightInset
         let titleHeight:    CGFloat = self.titleLabel.sizeThatFits(width: textWidth).height.ceiled()
         let textHeight:     CGFloat = self.textLabel.sizeThatFits(width: textWidth).height.ceiled()
-        let spacing:        CGFloat = Toast.Config.title.paragraph.paragraphSpacing
+        let spacing:        CGFloat = ceil(Toast.Config.title.font.lineHeight * 0.3)
         let height:         CGFloat = max(iconSize.height, accessorySize.height, titleHeight + spacing + textHeight).ceiled() + padding * 2
         
         if self.traitCollection.layoutDirection == .rightToLeft {
