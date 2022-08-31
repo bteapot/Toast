@@ -51,28 +51,34 @@ extension Toast {
         public static var shadowRadius:     CGFloat = 4
         public static var shadowOpacity:    Float   = 0.5
         
-        public static var titleFont:        UIFont = .preferredFont(forTextStyle: .callout).with(weight: .semibold)
-        public static var textFont:         UIFont = .preferredFont(forTextStyle: .footnote)
-        public static var maxLines:         Int = 8
+        public static var title =
+            Label(
+                font: .preferredFont(forTextStyle: .callout).with(weight: .semibold),
+                maxLines: 2,
+                paragraph: {
+                    let paragraph = NSMutableParagraphStyle()
+                    paragraph.alignment = UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft ? .right : .left
+                    paragraph.lineHeightMultiple = 0.85
+                    paragraph.paragraphSpacing = UIFont.preferredFont(forTextStyle: .callout).with(weight: .semibold).lineHeight * 0.15
+                    paragraph.lineBreakMode = .byTruncatingTail
+                    return paragraph
+                }()
+            )
         
-        public static var titleParagraph: NSMutableParagraphStyle = {
-            let paragraph = NSMutableParagraphStyle()
-            paragraph.alignment = UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft ? .right : .left
-            paragraph.lineHeightMultiple = 0.85
-            paragraph.paragraphSpacing = Toast.Config.titleFont.lineHeight * 0.15
-            paragraph.lineBreakMode = .byTruncatingTail
-            return paragraph
-        }()
-        
-        public static var textParagraph: NSMutableParagraphStyle = {
-            let paragraph = NSMutableParagraphStyle()
-            paragraph.alignment = UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft ? .right : .left
-            paragraph.lineHeightMultiple = 0.85
-            paragraph.paragraphSpacing = Toast.Config.textFont.lineHeight * 0.15
-            paragraph.lineBreakMode = .byTruncatingTail
-            paragraph.hyphenationFactor = 1
-            return paragraph
-        }()
+        public static var text =
+            Label(
+                font: .preferredFont(forTextStyle: .footnote),
+                maxLines: 6,
+                paragraph: {
+                    let paragraph = NSMutableParagraphStyle()
+                    paragraph.alignment = UIApplication.shared.userInterfaceLayoutDirection == .rightToLeft ? .right : .left
+                    paragraph.lineHeightMultiple = 0.85
+                    paragraph.paragraphSpacing = UIFont.preferredFont(forTextStyle: .footnote).lineHeight * 0.15
+                    paragraph.lineBreakMode = .byTruncatingTail
+                    paragraph.hyphenationFactor = 1
+                    return paragraph
+                }()
+            )
         
         private init() {}
     }
@@ -85,5 +91,13 @@ extension Toast.Config {
         public var touched:    UIColor
         public var icon:       UIImage?
         public var timeout:    TimeInterval?
+    }
+}
+
+extension Toast.Config {
+    public struct Label {
+        public var font:      UIFont
+        public var maxLines:  Int
+        public var paragraph: NSMutableParagraphStyle
     }
 }

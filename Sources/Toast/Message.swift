@@ -27,38 +27,31 @@ final class Message: UIView {
         self.touched = touched
         self.tap = tap
         
-        // label
-        self.label = UILabel(frame: .zero)
-        self.label.numberOfLines = Toast.Config.maxLines
-        self.label.attributedText = {
-            let string = NSMutableAttributedString()
-            
-            // title
-            string.append(
-                NSAttributedString(
-                    string: title + "\n",
-                    attributes: [
-                        .font: Toast.Config.titleFont,
-                        .foregroundColor: foreground,
-                        .paragraphStyle: Toast.Config.titleParagraph,
-                    ]
-                )
+        // header label
+        self.titleLabel = UILabel(frame: .zero)
+        self.titleLabel.numberOfLines = Toast.Config.title.maxLines
+        self.titleLabel.attributedText =
+            NSAttributedString(
+                string: title,
+                attributes: [
+                    .font: Toast.Config.title.font,
+                    .foregroundColor: foreground,
+                    .paragraphStyle: Toast.Config.title.paragraph,
+                ]
             )
             
-            // text
-            string.append(
-                NSAttributedString(
-                    string: text,
-                    attributes: [
-                        .font: Toast.Config.textFont,
-                        .foregroundColor: foreground,
-                        .paragraphStyle: Toast.Config.textParagraph,
-                    ]
-                )
+        // text label
+        self.textLabel = UILabel(frame: .zero)
+        self.textLabel.numberOfLines = Toast.Config.text.maxLines
+        self.textLabel.attributedText =
+            NSAttributedString(
+                string: text,
+                attributes: [
+                    .font: Toast.Config.text.font,
+                    .foregroundColor: foreground,
+                    .paragraphStyle: Toast.Config.text.paragraph,
+                ]
             )
-
-            return string
-        }()
         
         // icon
         self.icon = UIImageView(image: icon)
@@ -82,7 +75,8 @@ final class Message: UIView {
         
         // добавим сабвьюхи
         self.addSubview(self.icon)
-        self.addSubview(self.label)
+        self.addSubview(self.titleLabel)
+        self.addSubview(self.textLabel)
         self.addSubview(self.accessory)
     }
     
@@ -100,9 +94,10 @@ final class Message: UIView {
     
     // MARK: - Subviews
     
-    let label:     UILabel
-    let icon:      UIImageView
-    let accessory: UIImageView
+    let titleLabel: UILabel
+    let textLabel:  UILabel
+    let icon:       UIImageView
+    let accessory:  UIImageView
     
     // MARK: - Geometry
     
@@ -122,8 +117,10 @@ final class Message: UIView {
         let leftInset:      CGFloat = iconSize.width > 0 ? iconSize.width + padding * 2 : padding
         let rightInset:     CGFloat = accessorySize.width > 0 ? accessorySize.width + padding * 2 : padding
         let textWidth:      CGFloat = size.width - leftInset - rightInset
-        let textHeight:     CGFloat = self.label.sizeThatFits(width: textWidth).height
-        let height:         CGFloat = max(iconSize.height, accessorySize.height, textHeight).ceiled() + padding * 2
+        let titleHeight:    CGFloat = self.titleLabel.sizeThatFits(width: textWidth).height.ceiled()
+        let textHeight:     CGFloat = self.textLabel.sizeThatFits(width: textWidth).height.ceiled()
+        let spacing:        CGFloat = Toast.Config.title.paragraph.paragraphSpacing
+        let height:         CGFloat = max(iconSize.height, accessorySize.height, titleHeight + spacing + textHeight).ceiled() + padding * 2
         
         if self.traitCollection.layoutDirection == .rightToLeft {
             self.icon.frame =
@@ -135,12 +132,21 @@ final class Message: UIView {
                 )
                 .ceiled()
             
-            self.label.frame =
+            self.titleLabel.frame =
                 CGRect(
                     x:      rightInset,
                     y:      padding,
                     width:  textWidth,
-                    height: height - padding * 2
+                    height: titleHeight
+                )
+                .ceiled()
+            
+            self.textLabel.frame =
+                CGRect(
+                    x:      rightInset,
+                    y:      padding + titleHeight + spacing,
+                    width:  textWidth,
+                    height: textHeight
                 )
                 .ceiled()
             
@@ -162,12 +168,21 @@ final class Message: UIView {
                 )
                 .ceiled()
             
-            self.label.frame =
+            self.titleLabel.frame =
                 CGRect(
                     x:      leftInset,
                     y:      padding,
                     width:  textWidth,
-                    height: height - padding * 2
+                    height: titleHeight
+                )
+                .ceiled()
+            
+            self.textLabel.frame =
+                CGRect(
+                    x:      leftInset,
+                    y:      padding + titleHeight + spacing,
+                    width:  textWidth,
+                    height: textHeight
                 )
                 .ceiled()
             
@@ -181,6 +196,14 @@ final class Message: UIView {
                 .ceiled()
         }
         
+        // store calculated size
+        self.lastSize =
+            CGSize(
+                width:  size.width,
+                height: height
+            )
+        
+        // return result
         return height
     }
     
@@ -210,7 +233,13 @@ final class Message: UIView {
         if let tap = self.tap {
             tap()
         } else {
-            UIPasteboard.general.string = self.label.text
+            
+            UIPasteboard.general.string = [
+                self.titleLabel.text,
+                self.textLabel.text,
+            ]
+            .compactMap { $0 }
+            .joined(separator: "\n")
         }
         
         // remove message

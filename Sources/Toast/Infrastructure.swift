@@ -124,8 +124,9 @@ extension W.VC {
             
             // duplicate of one of the already shown?
             if let previous = self.messages.first(where: {
-                $0.label.text            == message.label.text &&
-                $0.label.textColor       == message.label.textColor &&
+                $0.titleLabel.text       == message.titleLabel.text &&
+                $0.textLabel.text        == message.textLabel.text &&
+                $0.titleLabel.textColor  == message.titleLabel.textColor &&
                 $0.layer.backgroundColor == message.layer.backgroundColor &&
                 $0.icon.image            == message.icon.image &&
                 $0.accessory.image       == message.accessory.image
