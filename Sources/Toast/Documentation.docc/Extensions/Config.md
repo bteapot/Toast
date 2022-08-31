@@ -26,8 +26,5 @@ Configuration for ``Toast/Toast``.
 
 ### Typography
 
-- ``titleFont``
-- ``titleParagraph``
-- ``textFont``
-- ``textParagraph``
-- ``maxLines``
+- ``title``
+- ``text``

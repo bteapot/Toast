@@ -63,7 +63,7 @@ Toast.show(
 `Toast` stores its defaults in ``Toast/Toast/Config`` structure. You can adjust it just like so:
 
 ```swift
-Toast.Config.textFont = .preferredFont(forTextStyle: .callout)
+Toast.Config.text.font = .preferredFont(forTextStyle: .callout)
 Toast.Config.cornerRadius = 16
 Toast.Config.shadowOpacity = 0.15
 
