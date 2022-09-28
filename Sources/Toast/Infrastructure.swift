@@ -13,7 +13,8 @@ import UIKit
 
 final class W: UIWindow {
     required init() {
-        super.init(frame: UIScreen.main.bounds)
+        Self.captureStatusBarStyle()
+        super.init(windowScene: UIWindowScene.active)
         self.windowLevel = Toast.Config.windowLevel
         self.rootViewController = VC()
         self.isHidden = false
@@ -36,6 +37,26 @@ final class W: UIWindow {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         return self.vc.v.hitTest(self.vc.v.convert(point, from: self), with: event)
     }
+    
+    static var statusBarStyle: UIStatusBarStyle = .default
+    
+    private static func captureStatusBarStyle() {
+        Self.statusBarStyle = {
+            // modern variant?
+            if let style = UIWindowScene.active.statusBarManager?.statusBarStyle {
+                return style
+            }
+            
+            if  let window = UIWindowScene.active.windows.first(where: { $0.isKeyWindow }),
+                let root = window.rootViewController
+            {
+                let vc = root.childForStatusBarStyle ?? root
+                return vc.preferredStatusBarStyle
+            }
+            
+            return .default
+        }()
+    }
 }
 
 // MARK: - View Controller
@@ -44,6 +65,10 @@ extension W {
     final class VC: UIViewController {
         override func loadView() {
             self.view = V(frame: UIScreen.main.bounds)
+        }
+        
+        override var preferredStatusBarStyle: UIStatusBarStyle {
+            return W.statusBarStyle
         }
         
         var v: V { self.view as! V }
@@ -220,5 +245,16 @@ extension W.VC {
         func removeVisible() {
             self.remove(messages: self.messages.filter({ self.bounds.contains($0.frame) }))
         }
+    }
+}
+
+// MARK: - Window Scene
+
+private extension UIWindowScene {
+    static var active: UIWindowScene {
+        return UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .compactMap { $0 as? UIWindowScene }
+            .first!
     }
 }
