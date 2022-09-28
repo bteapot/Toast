@@ -253,8 +253,20 @@ extension W.VC {
 private extension UIWindowScene {
     static var active: UIWindowScene {
         return UIApplication.shared.connectedScenes
-            .filter { $0.activationState == .foregroundActive }
             .compactMap { $0 as? UIWindowScene }
+            .sorted(by: { $0.activationState.sortIndex < $1.activationState.sortIndex })
             .first!
+    }
+}
+
+private extension UIScene.ActivationState {
+    var sortIndex: Int {
+        switch self {
+            case .foregroundActive:   return 0
+            case .foregroundInactive: return 1
+            case .background:         return 2
+            case .unattached:         return 3
+            @unknown default:         return .max
+        }
     }
 }
