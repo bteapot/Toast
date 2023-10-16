@@ -41,15 +41,15 @@ extension Toast {
                 timeout: 6
             )
         
-        public static var windowLevel:      UIWindow.Level = .init(rawValue: UIWindow.Level.normal.rawValue + 1)
-        public static var insets:           UIEdgeInsets = .init(all: 24)
-        public static var maxWidth:         CGFloat = 480
-        public static var contentPadding:   CGFloat = 12
+        public private(set) static var windowLevel:      UIWindow.Level = .init(rawValue: UIWindow.Level.normal.rawValue + 1)
+        public private(set) static var insets:           UIEdgeInsets = .init(all: 24)
+        public private(set) static var maxWidth:         CGFloat = 480
+        public private(set) static var contentPadding:   CGFloat = 12
         
-        public static var cornerRadius:     CGFloat = 8
-        public static var shadowColor:      CGColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
-        public static var shadowRadius:     CGFloat = 4
-        public static var shadowOpacity:    Float   = 0.5
+        public private(set) static var cornerRadius:     CGFloat = 8
+        public private(set) static var shadowColor:      CGColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
+        public private(set) static var shadowRadius:     CGFloat = 4
+        public private(set) static var shadowOpacity:    Float   = 0.5
         
         public static var title =
             Label(
@@ -100,4 +100,16 @@ extension Toast.Config {
         public var maxLines:  Int
         public var paragraph: NSMutableParagraphStyle
     }
+}
+
+@MainActor
+extension Toast.Config {
+    public static func set(windowLevel: UIWindow.Level) { Self.windowLevel    = windowLevel }
+    public static func set(insets: UIEdgeInsets)        { Self.insets         = insets }
+    public static func set(maxWidth: CGFloat)           { Self.maxWidth       = maxWidth }
+    public static func set(contentPadding: CGFloat)     { Self.contentPadding = contentPadding }
+    public static func set(cornerRadius: CGFloat)       { Self.cornerRadius   = cornerRadius }
+    public static func set(shadowColor: CGColor)        { Self.shadowColor    = shadowColor }
+    public static func set(shadowRadius: CGFloat)       { Self.shadowRadius   = shadowRadius }
+    public static func set(shadowOpacity: Float)        { Self.shadowOpacity  = shadowOpacity }
 }
