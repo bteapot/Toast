@@ -63,14 +63,16 @@ Toast.show(
 `Toast` stores its defaults in ``Toast/Toast/Config`` structure. You can adjust it just like so:
 
 ```swift
-Toast.Config.text.font = .preferredFont(forTextStyle: .callout)
-Toast.Config.cornerRadius = 16
-Toast.Config.shadowOpacity = 0.15
+Toast.set(config: {
+    $0.text.font = .preferredFont(forTextStyle: .callout)
+    $0.cornerRadius = 16
+    $0.shadowOpacity = 0.15
 
-Toast.Config.info.icon = UIImage(systemName: "info.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))
-Toast.Config.info.timeout = 6
+    $0.info.icon = UIImage(systemName: "info.circle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))
+    $0.info.timeout = 6
 
-Toast.Config.error.icon = UIImage(systemName: "exclamationmark.triangle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))
+    $0.error.icon = UIImage(systemName: "exclamationmark.triangle.fill", withConfiguration: UIImage.SymbolConfiguration(pointSize: 32))
+})
 ```
 
 ## Author
