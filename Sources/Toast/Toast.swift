@@ -74,17 +74,17 @@ extension Toast {
     public static func info(
         title:      String,
         text:       String,
-        icon:       UIImage? = Config.info.icon,
+        icon:       UIImage? = Toast.config.info.icon,
         accessory:  UIImage? = nil,
-        timeout:    TimeInterval? = Config.info.timeout,
+        timeout:    TimeInterval? = Toast.config.info.timeout,
         tap:        (() -> Void)? = nil
     ) {
         self.show(
             title:      title,
             text:       text,
-            foreground: Config.info.foreground,
-            background: Config.info.background,
-            touched:    Config.info.touched,
+            foreground: Toast.config.info.foreground,
+            background: Toast.config.info.background,
+            touched:    Toast.config.info.touched,
             icon:       icon,
             accessory:  accessory,
             timeout:    timeout,
@@ -110,17 +110,17 @@ extension Toast {
     public static func error(
         title:      String,
         text:       String,
-        icon:       UIImage? = Config.error.icon,
+        icon:       UIImage? = Toast.config.error.icon,
         accessory:  UIImage? = nil,
-        timeout:    TimeInterval? = Config.error.timeout,
+        timeout:    TimeInterval? = Toast.config.error.timeout,
         tap:        (() -> Void)? = nil
     ) {
         self.show(
             title:      title,
             text:       text,
-            foreground: Config.error.foreground,
-            background: Config.error.background,
-            touched:    Config.error.touched,
+            foreground: Toast.config.error.foreground,
+            background: Toast.config.error.background,
+            touched:    Toast.config.error.touched,
             icon:       icon,
             accessory:  accessory,
             timeout:    timeout,

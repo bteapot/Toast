@@ -15,7 +15,7 @@ final class W: UIWindow {
     required init() {
         Self.captureStatusBarStyle()
         super.init(windowScene: UIWindowScene.active)
-        self.windowLevel = Toast.Config.windowLevel
+        self.windowLevel = Toast.config.windowLevel
         self.rootViewController = VC()
         self.isHidden = false
     }
@@ -83,9 +83,9 @@ extension W.VC {
         // MARK: - Layout
         
         override func layoutSubviews() {
-            let bounds:     CGRect  = self.bounds.inset(by: self.safeAreaInsets).inset(by: Toast.Config.insets)
-            let gap:        CGFloat = Toast.Config.contentPadding
-            let width:      CGFloat = min(bounds.width, Toast.Config.maxWidth)
+            let bounds:     CGRect  = self.bounds.inset(by: self.safeAreaInsets).inset(by: Toast.config.insets)
+            let gap:        CGFloat = Toast.config.contentPadding
+            let width:      CGFloat = min(bounds.width, Toast.config.maxWidth)
             var top:        CGFloat = bounds.origin.y
             
             self.subviews.reversed().forEach { view in
@@ -171,8 +171,8 @@ extension W.VC {
             }
             
             // pre-animation position
-            let bounds: CGRect  = self.bounds.inset(by: self.safeAreaInsets).inset(by: Toast.Config.insets)
-            let width:  CGFloat = min(bounds.width, Toast.Config.maxWidth)
+            let bounds: CGRect  = self.bounds.inset(by: self.safeAreaInsets).inset(by: Toast.config.insets)
+            let width:  CGFloat = min(bounds.width, Toast.config.maxWidth)
             let height: CGFloat = message.sizeThatFits(width: width).height
             
             message.frame =

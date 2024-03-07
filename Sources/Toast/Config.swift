@@ -9,9 +9,31 @@ import Foundation
 import UIKit
 
 
+// MARK: - Публичное
+
+extension Toast {
+    public static var config: Config {
+        lock.withLock { _config }
+    }
+    
+    public static func set(config: (inout Config) -> Void) {
+        lock.withLock {
+            config(&_config)
+        }
+    }
+}
+
+
+// MARK: - Приватное
+
+private extension Toast {
+    static var _config = Config()
+    static let lock = NSLock()
+}
+
 extension Toast {
     public struct Config {
-        public static var info =
+        public var info =
             Scheme(
                 foreground: UIColor(
                     light: UIColor(hue: 0.00, saturation: 0.00, brightness: 1.00, alpha: 1.00),
@@ -29,7 +51,7 @@ extension Toast {
                 timeout: 3
             )
         
-        public static var error =
+        public var error =
             Scheme(
                 foreground: UIColor(hue: 0.00, saturation: 0.00, brightness: 1.00, alpha: 1.00),
                 background: UIColor(hue: 0.00, saturation: 0.95, brightness: 0.70, alpha: 0.85),
@@ -41,17 +63,17 @@ extension Toast {
                 timeout: 6
             )
         
-        public private(set) static var windowLevel:      UIWindow.Level = .init(rawValue: UIWindow.Level.normal.rawValue + 1)
-        public private(set) static var insets:           UIEdgeInsets = .init(all: 24)
-        public private(set) static var maxWidth:         CGFloat = 480
-        public private(set) static var contentPadding:   CGFloat = 12
+        public var windowLevel:      UIWindow.Level = .init(rawValue: UIWindow.Level.normal.rawValue + 1)
+        public var insets:           UIEdgeInsets = .init(all: 24)
+        public var maxWidth:         CGFloat = 480
+        public var contentPadding:   CGFloat = 12
         
-        public private(set) static var cornerRadius:     CGFloat = 8
-        public private(set) static var shadowColor:      CGColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
-        public private(set) static var shadowRadius:     CGFloat = 4
-        public private(set) static var shadowOpacity:    Float   = 0.5
+        public var cornerRadius:     CGFloat = 8
+        public var shadowColor:      CGColor = .init(red: 0, green: 0, blue: 0, alpha: 1)
+        public var shadowRadius:     CGFloat = 4
+        public var shadowOpacity:    Float   = 0.5
         
-        public static var title =
+        public var title =
             Label(
                 font: .preferredFont(forTextStyle: .callout).with(weight: .semibold),
                 maxLines: 2,
@@ -65,7 +87,7 @@ extension Toast {
                 }()
             )
         
-        public static var text =
+        public var text =
             Label(
                 font: .preferredFont(forTextStyle: .footnote),
                 maxLines: 6,
@@ -79,8 +101,8 @@ extension Toast {
                     return paragraph
                 }()
             )
-        
-        private init() {}
+
+        fileprivate init() {}
     }
 }
 
@@ -100,16 +122,4 @@ extension Toast.Config {
         public var maxLines:  Int
         public var paragraph: NSMutableParagraphStyle
     }
-}
-
-@MainActor
-extension Toast.Config {
-    public static func set(windowLevel: UIWindow.Level) { Self.windowLevel    = windowLevel }
-    public static func set(insets: UIEdgeInsets)        { Self.insets         = insets }
-    public static func set(maxWidth: CGFloat)           { Self.maxWidth       = maxWidth }
-    public static func set(contentPadding: CGFloat)     { Self.contentPadding = contentPadding }
-    public static func set(cornerRadius: CGFloat)       { Self.cornerRadius   = cornerRadius }
-    public static func set(shadowColor: CGColor)        { Self.shadowColor    = shadowColor }
-    public static func set(shadowRadius: CGFloat)       { Self.shadowRadius   = shadowRadius }
-    public static func set(shadowOpacity: Float)        { Self.shadowOpacity  = shadowOpacity }
 }

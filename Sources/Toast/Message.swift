@@ -29,27 +29,27 @@ final class Message: UIView {
         
         // header label
         self.titleLabel = UILabel(frame: .zero)
-        self.titleLabel.numberOfLines = Toast.Config.title.maxLines
+        self.titleLabel.numberOfLines = Toast.config.title.maxLines
         self.titleLabel.attributedText =
             NSAttributedString(
                 string: title,
                 attributes: [
-                    .font: Toast.Config.title.font,
+                    .font: Toast.config.title.font,
                     .foregroundColor: foreground,
-                    .paragraphStyle: Toast.Config.title.paragraph,
+                    .paragraphStyle: Toast.config.title.paragraph,
                 ]
             )
             
         // text label
         self.textLabel = UILabel(frame: .zero)
-        self.textLabel.numberOfLines = Toast.Config.text.maxLines
+        self.textLabel.numberOfLines = Toast.config.text.maxLines
         self.textLabel.attributedText =
             NSAttributedString(
                 string: text,
                 attributes: [
-                    .font: Toast.Config.text.font,
+                    .font: Toast.config.text.font,
                     .foregroundColor: foreground,
-                    .paragraphStyle: Toast.Config.text.paragraph,
+                    .paragraphStyle: Toast.config.text.paragraph,
                 ]
             )
         
@@ -68,10 +68,10 @@ final class Message: UIView {
         self.backgroundColor  = background
         
         self.layer.masksToBounds = false
-        self.layer.cornerRadius  = Toast.Config.cornerRadius
-        self.layer.shadowColor   = Toast.Config.shadowColor
-        self.layer.shadowRadius  = Toast.Config.shadowRadius
-        self.layer.shadowOpacity = Toast.Config.shadowOpacity
+        self.layer.cornerRadius  = Toast.config.cornerRadius
+        self.layer.shadowColor   = Toast.config.shadowColor
+        self.layer.shadowRadius  = Toast.config.shadowRadius
+        self.layer.shadowOpacity = Toast.config.shadowOpacity
         
         // добавим сабвьюхи
         self.addSubview(self.icon)
@@ -111,7 +111,7 @@ final class Message: UIView {
         }
         
         // layout views
-        let padding:        CGFloat = Toast.Config.contentPadding
+        let padding:        CGFloat = Toast.config.contentPadding
         let iconSize:       CGSize  = self.icon.image?.size ?? .zero
         let accessorySize:  CGSize  = self.accessory.image?.size ?? .zero
         let leftInset:      CGFloat = iconSize.width > 0 ? iconSize.width + padding * 2 : padding
@@ -119,7 +119,7 @@ final class Message: UIView {
         let textWidth:      CGFloat = size.width - leftInset - rightInset
         let titleHeight:    CGFloat = self.titleLabel.sizeThatFits(width: textWidth).height.ceiled()
         let textHeight:     CGFloat = self.textLabel.sizeThatFits(width: textWidth).height.ceiled()
-        let spacing:        CGFloat = ceil(Toast.Config.title.font.lineHeight * 0.3)
+        let spacing:        CGFloat = ceil(Toast.config.title.font.lineHeight * 0.3)
         let height:         CGFloat = max(iconSize.height, accessorySize.height, titleHeight + spacing + textHeight).ceiled() + padding * 2
         
         if self.traitCollection.layoutDirection == .rightToLeft {
