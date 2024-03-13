@@ -35,7 +35,11 @@ final class W: UIWindow {
     var vc: VC { self.rootViewController as! VC }
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        return self.vc.v.hitTest(self.vc.v.convert(point, from: self), with: event)
+        if let event, event.type == .hover {
+            return nil
+        } else {
+            return self.vc.v.hitTest(self.vc.v.convert(point, from: self), with: event)
+        }
     }
     
     static var statusBarStyle: UIStatusBarStyle = .default
