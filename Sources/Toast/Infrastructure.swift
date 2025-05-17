@@ -13,8 +13,13 @@ import UIKit
 
 final class W: UIWindow {
     required init() {
+        if let active = UIWindowScene.active {
+            super.init(windowScene: active)
+        } else {
+            super.init()
+        }
+        
         Self.captureStatusBarStyle()
-        super.init(windowScene: UIWindowScene.active)
         self.windowLevel = Toast.config.windowLevel
         self.rootViewController = VC()
         self.isHidden = false
@@ -47,11 +52,11 @@ final class W: UIWindow {
     private static func captureStatusBarStyle() {
         Self.statusBarStyle = {
             // modern variant?
-            if let style = UIWindowScene.active.statusBarManager?.statusBarStyle {
+            if let style = UIWindowScene.active?.statusBarManager?.statusBarStyle {
                 return style
             }
             
-            if  let window = UIWindowScene.active.windows.first(where: { $0.isKeyWindow }),
+            if  let window = UIWindowScene.active?.windows.first(where: { $0.isKeyWindow }),
                 let root = window.rootViewController
             {
                 let vc = root.childForStatusBarStyle ?? root
@@ -255,11 +260,11 @@ extension W.VC {
 // MARK: - Window Scene
 
 private extension UIWindowScene {
-    static var active: UIWindowScene {
+    static var active: UIWindowScene? {
         return UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
             .sorted(by: { $0.activationState.sortIndex < $1.activationState.sortIndex })
-            .first!
+            .first
     }
 }
 
