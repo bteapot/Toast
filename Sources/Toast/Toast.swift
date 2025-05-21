@@ -39,7 +39,9 @@ extension Toast {
     ) {
         DispatchQueue.main.async {
             // get window
-            let w = W.get()
+            guard let w = W.get() else {
+                return
+            }
             
             // show message
             w.vc.v.show(

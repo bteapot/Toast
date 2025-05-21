@@ -12,29 +12,27 @@ import UIKit
 // MARK: - Window
 
 final class W: UIWindow {
-    required init() {
-        if let active = UIWindowScene.active {
-            super.init(windowScene: active)
-        } else {
-            super.init()
-        }
-        
-        Self.captureStatusBarStyle()
-        self.windowLevel = Toast.config.windowLevel
-        self.rootViewController = VC()
-        self.isHidden = false
-    }
-    
-    required init?(coder: NSCoder) { fatalError() }
-    
     static weak var current: W?
     
-    static func get() -> W {
-        return W.current ?? {
-            let w = W()
+    static func get() -> W? {
+        if let current = W.current {
+            return current
+        }
+        
+        if let active = UIWindowScene.active {
+            let w = W(windowScene: active)
+            
+            Self.captureStatusBarStyle()
+            w.windowLevel = Toast.config.windowLevel
+            w.rootViewController = VC()
+            w.isHidden = false
+            
             W.current = w
+            
             return w
-        }()
+        }
+        
+        return nil
     }
     
     var vc: VC { self.rootViewController as! VC }
